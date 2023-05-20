@@ -1,2 +1,5 @@
 # environments
 .venv
+
+# Credentials
+creds.py

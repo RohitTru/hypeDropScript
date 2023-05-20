@@ -36,11 +36,30 @@ def login_steam():
     sign_in_button = driver.find_element(By.XPATH, '//*[@id="imageLogin"]')
     sign_in_button.click()
 
-time.sleep(3)
-login_steam()
-time.sleep(300)
+def navigation():
+    free_drop_button = driver.find_element(By.XPATH, '/html/body/cw-root/cw-header/nav/div[1]/li[5]/a')
+    free_drop_button.click()
+    
+def open_cases():
+    fifth_drop = driver.find_element(By.XPATH, '/html/body/cw-root/mat-sidenav-container/mat-sidenav-content/div/cw-daily-rewards/div/div[2]/cw-reward-tile[5]/cw-flip-card')
+    fifth_drop.click()
+
+
+def main():
+    time.sleep(3)
+    login_steam()
+    time.sleep(1)
+    navigation()
+    time.sleep(1)
+    #open_cases()
+    time.sleep(300)
+
+    driver.close()
+    driver.quit()
+
+
+if __name__ == "__main__":
+    main()
 
 
 
-driver.close()
-driver.quit()

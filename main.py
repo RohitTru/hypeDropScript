@@ -5,6 +5,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 from creds import username, password
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 #Selinium setup
 driver = webdriver.Chrome(ChromeDriverManager().install())
@@ -30,11 +32,19 @@ def login_steam():
     sign_in = driver.find_element(By.XPATH, '//*[@id="responsive_page_template_content"]/div[1]/div[1]/div/div/div/div[2]/div/form/div[4]')
     sign_in.click()
     
-    # figure out how to wait for 2 factor auth page to load
-    time.sleep(20)
+def two_factor_auth_approval():
+    required_url = 'https://steamcommunity.com/openid/login?openid.mode=checkid_setup&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.return_to=https%3A%2F%2Fapi.hypedrop.com%2Fauth%2Fsteam%2Freturn&openid.realm=https%3A%2F%2Fapi.hypedrop.com?openid.mode=checkid_setup&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.return_to=https%3A%2F%2Fapi.hypedrop.com%2Fauth%2Fsteam%2Freturn&openid.realm=https%3A%2F%2Fapi.hypedrop.com'
 
-    sign_in_button = driver.find_element(By.XPATH, '//*[@id="imageLogin"]')
-    sign_in_button.click()
+    while True:
+        current_url = driver.current_url
+    
+        if str(current_url) == str(required_url):
+            sign_in_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="imageLogin"]')))
+            sign_in_button.click()
+        if str(current_url) != str(required_url):
+            time.sleep(1)
+
+   
 
 def navigation():
     free_drop_button = driver.find_element(By.XPATH, '/html/body/cw-root/cw-header/nav/div[1]/li[5]/a')
@@ -48,10 +58,16 @@ def open_cases():
 def main():
     time.sleep(3)
     login_steam()
+    
+    time.sleep(1)
+    two_factor_auth_approval()
+   
     time.sleep(1)
     navigation()
+    
     time.sleep(1)
     #open_cases()
+   
     time.sleep(300)
 
     driver.close()

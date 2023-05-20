@@ -41,17 +41,18 @@ def two_factor_auth_approval():
         if str(current_url) == str(required_url):
             sign_in_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="imageLogin"]')))
             sign_in_button.click()
+            print('logging in...')
+            break
         if str(current_url) != str(required_url):
             time.sleep(1)
-
-   
 
 def navigation():
     free_drop_button = driver.find_element(By.XPATH, '/html/body/cw-root/cw-header/nav/div[1]/li[5]/a')
     free_drop_button.click()
-    
+    print("opening free gifts page")
+
 def open_cases():
-    fifth_drop = driver.find_element(By.XPATH, '/html/body/cw-root/mat-sidenav-container/mat-sidenav-content/div/cw-daily-rewards/div/div[2]/cw-reward-tile[5]/cw-flip-card')
+    fifth_drop = driver.find_element(By.XPATH, '/html/body/cw-root/mat-sidenav-container/mat-sidenav-content/div/cw-daily-rewards/div/div[2]/cw-reward-tile[5]/cw-flip-card/div/div[1]/div')
     fifth_drop.click()
 
 
@@ -64,9 +65,12 @@ def main():
    
     time.sleep(1)
     navigation()
-    
+
     time.sleep(1)
-    #open_cases()
+    driver.refresh()
+
+    time.sleep(1)
+    open_cases()
    
     time.sleep(300)
 
